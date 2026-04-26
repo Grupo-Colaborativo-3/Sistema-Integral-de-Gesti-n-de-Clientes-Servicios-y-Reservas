@@ -1,0 +1,26 @@
+[2026-04-25 21:42:54] SERVICIO AGREGADO: Reserva de Sala
+[2026-04-25 21:42:54] SERVICIO AGREGADO: Alquiler de Laptop
+[2026-04-25 21:42:54] SERVICIO AGREGADO: Asesoría IT
+[2026-04-25 21:42:54] FALLO REGISTRO: Formato de correo inválido: pedro_sin_arroba.com
+[2026-04-25 21:42:54] CLIENTE AGREGADO: Cliente: Juan David (ID: C01)
+[2026-04-25 21:42:54] CLIENTE AGREGADO: Cliente: Maria Lopez (ID: C02)
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Reserva de Sala para Juan David duración 4. Estado inicial: Pendiente
+[2026-04-25 21:42:54] ÉXITO: Reserva de Sala para Juan David - Total: $285600.00
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Alquiler de Laptop para Maria Lopez duración 2. Estado inicial: Pendiente
+[2026-04-25 21:42:54] ÉXITO: Alquiler de Laptop para Maria Lopez - Total: $90000.00
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Reserva de Sala para Juan David duración -2. Estado inicial: Pendiente
+[2026-04-25 21:42:54] RESERVA RECHAZADA: Parámetro inválido en reserva: La duración/cantidad debe ser mayor o igual a cero.
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Asesoría IT para Maria Lopez duración 5. Estado inicial: Pendiente
+[2026-04-25 21:42:54] ÉXITO: Asesoría IT para Maria Lopez - Total: $600000.00
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Alquiler de Laptop para Juan David duración 3. Estado inicial: Pendiente
+[2026-04-25 21:42:54] ÉXITO: Alquiler de Laptop para Juan David - Total: $135000.00
+[2026-04-25 21:42:54] CANCELACIÓN: Reserva cancelada para Juan David.
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Reserva de Sala para Maria Lopez duración 2. Estado inicial: Pendiente
+[2026-04-25 21:42:54] ÉXITO: Reserva de Sala para Maria Lopez - Total: $142800.00
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Asesoría IT para Juan David duración 0. Estado inicial: Pendiente
+[2026-04-25 21:42:54] ÉXITO: Asesoría IT para Juan David - Total: $0.00
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Alquiler de Laptop para Maria Lopez duración 1. Estado inicial: Pendiente
+[2026-04-25 21:42:54] ÉXITO: Alquiler de Laptop para Maria Lopez - Total: $45000.00
+[2026-04-25 21:42:54] CANCELACIÓN: Reserva cancelada para Maria Lopez.
+[2026-04-25 21:42:54] RESERVA REGISTRADA: Reserva de Sala para Juan David duración 5. Estado inicial: Pendiente
+[2026-04-25 21:42:54] ÉXITO: Reserva de Sala para Juan David - Total: $357000.00
