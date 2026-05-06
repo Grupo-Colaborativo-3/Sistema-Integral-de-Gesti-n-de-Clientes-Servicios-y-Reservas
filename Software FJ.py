@@ -262,7 +262,7 @@ class Reserva:
                 f"No se puede confirmar una reserva en estado '{self.estado}'."
             )
         self.estado = "Confirmada"
-        registrar_log(f"CONFIRMACIÓN MANUAL: Reserva confirmada para {self.cliente.nombre}.")
+        registrar_log(f"CONFIRMACÓN MANUAL: Reserva confirmada para {self.cliente.nombre}.")
 
     def cancelar(self):
         """
@@ -325,17 +325,79 @@ class GestorSoftwareFJ:
         return reserva
 
     def listar_reservas(self):
-        """Muestra en consola todas las reservas registradas."""
-        print("\n=== LISTADO DE RESERVAS ===")
+        """Muestra en consola todas las reservas registradas de forma ordenada."""
+        print("\n" + "="*70)
+        print("=== LISTADO DE RESERVAS ===".center(70))
+        print("="*70)
+        
         if not self.lista_reservas:
-            print("No hay reservas registradas.")
-        for idx, r in enumerate(self.lista_reservas, 1):
-            print(
-                f"{idx}. {r.servicio.nombre_servicio} | "
-                f"Cliente: {r.cliente.nombre} | "
-                f"Duración: {r.duracion} | "
-                f"Estado: {r.estado}"
-            )
+            print("No hay reservas registradas.".center(70))
+        else:
+            # Encabezados de la tabla
+            print(f"{'N°':<4} {'SERVICIO':<20} {'CLIENTE':<20} {'DURACIÓN':<10} {'ESTADO':<12}")
+            print("-"*70)
+            
+            # Mostrar cada reserva formateada
+            for idx, r in enumerate(self.lista_reservas, 1):
+                # Truncar texto si es muy largo para mantener formato de tabla
+                servicio = r.servicio.nombre_servicio[:18] + ".." if len(r.servicio.nombre_servicio) > 20 else r.servicio.nombre_servicio
+                cliente = r.cliente.nombre[:18] + ".." if len(r.cliente.nombre) > 20 else r.cliente.nombre
+                
+                # Determinar color para el estado (solo por estética)
+                estado_color = r.estado
+                if r.estado == "Confirmada":
+                    estado_color = f"\033[92m{r.estado}\033[0m"  # Verde
+                elif r.estado in {"Fallida", "Error de Sistema"}:
+                    estado_color = f"\033[91m{r.estado}\033[0m"  # Rojo
+                elif r.estado == "Cancelada":
+                    estado_color = f"\033[93m{r.estado}\033[0m"  # Amarillo
+                
+                print(f"{idx:<4} {servicio:<20} {cliente:<20} {r.duracion:<10} {estado_color}")
+            
+            print("="*70)
+            
+            # Mostrar estadísticas simples
+            total_confirmadas = sum(1 for r in self.lista_reservas if r.estado == "Confirmada")
+            total_canceladas = sum(1 for r in self.lista_reservas if r.estado == "Cancelada")
+            total_fallidas = sum(1 for r in self.lista_reservas if r.estado in {"Fallida", "Error de Sistema"})
+            
+            print(f"\n📊 RESUMEN: Confirmadas: {total_confirmadas} | Canceladas: {total_canceladas} | Fallidas: {total_fallidas} | Total: {len(self.lista_reservas)}")
+        
+        print("="*70 + "\n")
+
+    def exportar_reservas_txt(self, archivo="reservas_exportadas.txt"):
+        """Exporta el listado de reservas a un archivo de texto."""
+        try:
+            with open(archivo, "w", encoding="utf-8") as f:
+                f.write("="*70 + "\n")
+                f.write("=== LISTADO DE RESERVAS ===\n")
+                f.write("="*70 + "\n\n")
+                
+                if not self.lista_reservas:
+                    f.write("No hay reservas registradas.\n")
+                else:
+                    f.write(f"{'N°':<4} {'SERVICIO':<20} {'CLIENTE':<20} {'DURACIÓN':<10} {'ESTADO':<12}\n")
+                    f.write("-"*70 + "\n")
+                    
+                    for idx, r in enumerate(self.lista_reservas, 1):
+                        servicio = r.servicio.nombre_servicio[:18] + ".." if len(r.servicio.nombre_servicio) > 20 else r.servicio.nombre_servicio
+                        cliente = r.cliente.nombre[:18] + ".." if len(r.cliente.nombre) > 20 else r.cliente.nombre
+                        f.write(f"{idx:<4} {servicio:<20} {cliente:<20} {r.duracion:<10} {r.estado}\n")
+                    
+                    f.write("-"*70 + "\n\n")
+                    total_confirmadas = sum(1 for r in self.lista_reservas if r.estado == "Confirmada")
+                    total_canceladas = sum(1 for r in self.lista_reservas if r.estado == "Cancelada")
+                    total_fallidas = sum(1 for r in self.lista_reservas if r.estado in {"Fallida", "Error de Sistema"})
+                    
+                    f.write(f"Total reservas confirmadas: {total_confirmadas}\n")
+                    f.write(f"Total reservas canceladas: {total_canceladas}\n")
+                    f.write(f"Total reservas fallidas: {total_fallidas}\n")
+                    f.write(f"Total reservas procesadas: {len(self.lista_reservas)}\n")
+            
+            registrar_log(f"LISTADO EXPORTADO: Reservas exportadas a {archivo}")
+            print(f"✅ Reservas exportadas a '{archivo}'")
+        except Exception as e:
+            print(f"❌ Error al exportar: {e}")
 
 
 # =========================================================================
@@ -383,20 +445,20 @@ def ejecutar_simulacion_automatica():
     # MATRIZ DE PRUEBA (10 OPERACIONES)
     # Mezcla casos de éxito con casos que dispararán excepciones
     operaciones = [
-        (clientes[0], s_sala, 4),      # 1. Éxito
-        (clientes[1], s_equipo, 2),    # 2. Éxito
-        (clientes[0], s_sala, -2),     # 3. Fallo (Duración negativa)
-        (clientes[1], s_asesoria, 5),  # 4. Éxito
-        (clientes[2], s_equipo, 1),    # 5. Fallo (Cliente inexistente/None)
-        (clientes[0], s_equipo, 3),    # 6. Éxito
-        (clientes[1], s_sala, 2),      # 7. Éxito
-        (clientes[0], s_asesoria, 0),  # 8. Fallo (Duración cero)
-        (clientes[1], s_equipo, 1),    # 9. Éxito
-        (clientes[0], s_sala, 5)       # 10. Éxito
+        (clientes[0], s_sala, 4, "Juan David"),      # 1. Éxito
+        (clientes[1], s_equipo, 2, "Maria Lopez"),    # 2. Éxito
+        (clientes[0], s_sala, -2, "Juan David"),     # 3. Fallo (Duración negativa)
+        (clientes[1], s_asesoria, 5, "Maria Lopez"),  # 4. Éxito
+        (clientes[2], s_equipo, 1, "Pedro Error"),    # 5. Fallo (Cliente inexistente/None)
+        (clientes[0], s_equipo, 3, "Juan David"),    # 6. Éxito
+        (clientes[1], s_sala, 2, "Maria Lopez"),     # 7. Éxito
+        (clientes[0], s_asesoria, 0, "Juan David"),  # 8. Fallo (Duración cero)
+        (clientes[1], s_equipo, 1, "Maria Lopez"),   # 9. Éxito
+        (clientes[0], s_sala, 5, "Juan David")       # 10. Éxito
     ]
 
     # Ejecución del bucle de simulación
-    for i, (c, s, d) in enumerate(operaciones, 1):
+    for i, (c, s, d, nombre_cliente) in enumerate(operaciones, 1):
         print(f"Operación #{i}:")
         try:
             # Registrar la reserva a través del gestor
@@ -413,12 +475,21 @@ def ejecutar_simulacion_automatica():
         except ReservaInvalidaError as e:
             # Captura del error encadenado para mostrarlo en consola
             print(f"Resultado: {e}\n")
+        except DatosClienteError as e:
+            # Captura específica para error de cliente no registrado
+            print(f"Resultado: Cliente '{nombre_cliente}' no registrado en el sistema - {e}\n")
         except ErrorSoftwareFJ as e:
             # Captura general de errores del sistema
             print(f"Error del sistema: {e}\n")
 
     # Listar todas las reservas al final (demostración de listas internas)
     gestor.listar_reservas()
+    
+    # Opcional: Exportar a archivo de texto
+    print("\n¿Desea exportar las reservas a un archivo de texto?")
+    respuesta = input("Escriba 'si' para exportar, o cualquier otra tecla para continuar: ").lower()
+    if respuesta == 'si':
+        gestor.exportar_reservas_txt()
 
 
 if __name__ == "__main__":

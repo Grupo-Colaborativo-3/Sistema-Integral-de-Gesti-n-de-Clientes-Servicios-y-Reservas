@@ -1,0 +1,21 @@
+======================================================================
+=== LISTADO DE RESERVAS ===
+======================================================================
+
+N°   SERVICIO             CLIENTE              DURACIÓN   ESTADO      
+----------------------------------------------------------------------
+1    Reserva de Sala      Juan David           4          Confirmada
+2    Alquiler de Laptop   Maria Lopez          2          Confirmada
+3    Reserva de Sala      Juan David           -2         Fallida
+4    Asesoría IT          Maria Lopez          5          Confirmada
+5    Alquiler de Laptop   Juan David           3          Cancelada
+6    Reserva de Sala      Maria Lopez          2          Confirmada
+7    Asesoría IT          Juan David           0          Confirmada
+8    Alquiler de Laptop   Maria Lopez          1          Cancelada
+9    Reserva de Sala      Juan David           5          Confirmada
+----------------------------------------------------------------------
+
+Total reservas confirmadas: 6
+Total reservas canceladas: 2
+Total reservas fallidas: 1
+Total reservas procesadas: 9
