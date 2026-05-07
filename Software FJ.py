@@ -168,7 +168,7 @@ class AsesoriaEspecializada(Servicio):
         Calcula el costo por número de sesiones.
         Valida que las sesiones sean positivas.
         """
-        if sesiones < 0:
+        if sesiones <= 0:
             raise ValueError("Las sesiones no pueden ser negativas.")
         return self.precio_base * sesiones
 
